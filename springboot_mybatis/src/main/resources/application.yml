@@ -7,6 +7,9 @@ spring:
     url: jdbc:mysql://58.87.121.14:3306/eesy?userUnicode=true&characterEncoding=utf-8
     username: eesy
     password: 123
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
