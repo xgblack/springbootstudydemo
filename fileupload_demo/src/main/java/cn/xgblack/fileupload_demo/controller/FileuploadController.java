@@ -40,4 +40,27 @@ public class FileuploadController {
         }
         return "error";
     }
+
+    @PostMapping("/uploads")
+    public String uploads(MultipartFile[] files, HttpServletRequest request) {
+        String format = sdf.format(new Date());
+        String realPath = request.getServletContext().getRealPath("/img") + format;
+        File folder = new File(realPath);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        for (MultipartFile file : files) {
+            String oldName = file.getOriginalFilename();
+            String newName = UUID.randomUUID().toString() + oldName.substring(oldName.lastIndexOf("."));
+            try {
+                file.transferTo(new File(folder,newName));
+                String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/img" + format + newName;
+                System.out.println(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "success";
+    }
 }
