@@ -3,6 +3,7 @@ package cn.xgblack.security_demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,5 +26,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                  .withUser("xg2").password("456").roles("user")
         ;
+    }
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/admin/**").hasRole("admin")
+                .antMatchers("/**").hasAnyRole("admin", "user")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginProcessingUrl("/doLogin")
+                .permitAll()
+                .and()
+                .csrf().disable();
     }
 }
