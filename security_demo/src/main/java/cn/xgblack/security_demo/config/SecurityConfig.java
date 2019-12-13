@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -94,6 +95,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(new LogoutSuccessHandler() {
+                    @Override
+                    public void onLogoutSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication authentication) throws IOException, ServletException {
+                        resp.setContentType("application/json;charset=utf-8");
+                        PrintWriter out = resp.getWriter();
+                        Map<String, Object> map = new HashMap<>(4);
+                        map.put("status", 200);
+                        map.put("msg", "注销成功!");
+                        out.write(new ObjectMapper().writeValueAsString(map));
+                        out.flush();
+                        out.close();
+                    }
+                })
                 .and()
                 .csrf().disable();
     }
