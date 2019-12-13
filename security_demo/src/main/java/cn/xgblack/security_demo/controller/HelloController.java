@@ -25,4 +25,9 @@ public class HelloController {
     public String user(){
         return "hello user";
     }
+
+    @GetMapping("/login")
+    public String login(){
+        return "please login ";
+    }
 }
