@@ -7,7 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -20,15 +20,15 @@ public class MultiHttpSecurityConfig {
 
     @Bean
     PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("xg").password("123").roles("admin")
+                .withUser("xg").password(new BCryptPasswordEncoder().encode("123")).roles("admin")
                 .and()
-                .withUser("xg2").password("456").roles("user")
+                .withUser("xg2").password(new BCryptPasswordEncoder().encode("456")).roles("user")
         ;
     }
 
