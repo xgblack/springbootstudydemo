@@ -1,5 +1,7 @@
 package cn.xgblack.security_demo.controller;
 
+import cn.xgblack.security_demo.service.MethodService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +31,21 @@ public class HelloController {
     @GetMapping("/login")
     public String login(){
         return "please login ";
+    }
+
+    @Autowired
+    MethodService service;
+
+    @GetMapping("/hello1")
+    public String hello1(){
+        return service.admin();
+    }
+    @GetMapping("/hello2")
+    public String hello2(){
+        return service.user();
+    }
+    @GetMapping("/hello3")
+    public String hello3(){
+        return service.hello();
     }
 }
